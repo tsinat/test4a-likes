@@ -1,0 +1,17 @@
+<div class="container">
+    <h1>HOME!</h1>
+    <div class="messageContainer">
+        <div  ng-repeat='message in messages'>
+            <div class='messages'>
+                <div>{{message.messageBody}}</div>
+
+            </div>
+            <button ng-click='toogleLike(message)' class=' like btn btn-xs btn-success'>Like</button>
+            <span ><span class='dark'>Likes:</span> {{message.likes}}</span>
+            <span><span class='dark'>Author:</span> {{message.author}}</span>
+            <span><span class='dark'>Date:</span> {{message.date}}</span>
+        </div>
+    </div>
+
+
+</div>
