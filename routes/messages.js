@@ -27,39 +27,6 @@ router.get('/:id', (req, res) => {
     });
 });
 
-//remove property from message
-// router.put('/:propertyId/remove/:messageId', (req, res) => {
-//     var messageId = req.params.messageId;
-//     var propertyId = req.params.propertyId;
-//
-//     Message.findById(messageId, (err, message) => {
-//         if(err) return res.status(400).send(err);
-//
-//         tenant.livesin = message.livesin.filter(id => {
-//             return id.toString() !== propertyId.toString();
-//         });
-//         message.save((err) => {
-//             if(err) return res.status(400).send(err);
-//         });
-//     });
-// });
-// //add property to message
-// router.put('/:propertyId/lives/:messageId', (req, res) => {
-//
-//     var messageId = req.params.messageId;
-//     var propertyId = req.params.propertyId;
-//     console.log(messageId, propertyId);
-//
-//     Message.findById(messageId, (err, message) => {
-//         if (err) return res.status(400).send(err);
-//
-//         message.livesin.push(propertyId);
-//
-//         message.save((err, savedMessage) => {
-//             res.status(err ? 400 : 200).send(err || savedMessage);
-//         });
-//     });
-// });
 
 router.delete('/:id', (req, res) => {
 

@@ -58,18 +58,22 @@ app.controller('homeCtrl', function($scope, Auth) {
         var likes = {
             likes: message.likes
         }
+        var whichMessage = '';
+
         if (notliked) {
 
             if ($scope.currentUser) {
                 Auth.increaseLike(id, likes);
                 getAllMessages();
                 notliked = false;
+                whichMessage = message._id;
             }
-        }else{
+        }else if( whichMessage !== id){
             Auth.decreaseLike(id, likes);
             console.log(id, likes);
             getAllMessages();
             notliked = true;
+            whichMessage = message._id;
         }
     }
 });
