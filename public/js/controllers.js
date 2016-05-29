@@ -68,7 +68,7 @@ app.controller('homeCtrl', function($scope, Auth) {
                 notliked = false;
                 whichMessage = message._id;
             }
-        }else if( whichMessage !== id){
+        } else if (whichMessage !== id) {
             Auth.decreaseLike(id, likes);
             console.log(id, likes);
             getAllMessages();
@@ -87,8 +87,6 @@ app.controller('authFormCtrl', function($scope, $state, Auth) {
 
     $scope.submitForm = () => {
         if ($scope.currentState === 'register') {
-
-            // register user
             if ($scope.user.password !== $scope.user.password2) {
 
                 $scope.user.password = '';
@@ -114,7 +112,7 @@ app.controller('authFormCtrl', function($scope, $state, Auth) {
                 })
                 .catch(res => {
                     alert(res.data.error);
-                })
+                });
         }
     };
 
