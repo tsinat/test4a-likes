@@ -72,10 +72,6 @@ userSchema.statics.register = function(userObj, cb) {
 };
 
 userSchema.statics.authenticate = function(userObj, cb) {
-    // find the user by the username
-    // confirm the password
-
-    // if user is found, and password is good, create a token
     this.findOne({
         username: userObj.username
     }, (err, dbUser) => {

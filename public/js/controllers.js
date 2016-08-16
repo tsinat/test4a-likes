@@ -13,12 +13,6 @@ app.controller('profileCtrl', function($scope, Auth) {
         console.log(messageObj);
         Auth.newMessage(messageObj);
         $scope.newText = ''
-            // .then(res => {
-            //     console.log('success')
-            // })
-            // .catch(err => {
-            //     console.log('error');
-            // })
     }
 });
 
