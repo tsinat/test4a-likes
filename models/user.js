@@ -27,92 +27,82 @@ var userSchema = new mongoose.Schema({
     }]
 });
 
-// IT'S MIDDLEWARE!!
 userSchema.statics.isLoggedIn = function(req, res, next) {
-        var token = req.cookies.accessToken;
+    var token = req.cookies.accessToken;
 
-        jwt.verify(token, JWT_SECRET, (err, payload) => {
-                    if (err) return res.status(401).send({
-                        error: 'Must be authenticated.'
-                    });
+    jwt.verify(token, JWT_SECRET, (err, payload) => {
+                if (err) return res.status(401).send({
+                    error: 'Must be authenticated.'
+                });
 
-                    User
-                        .findById(payload._id)
-                        .select({
-                            password: false
-                        })
-                        .exec((err, user) => {
-                            if (err || !user) {
-                                return res.clearCookie('accessToken').status(400).send(err || {
-                                        error: 'Use
-
-
-
-
-
-                                            r not found.
-                                        '});
-                                    }
-
-                                    req.user = user; next();
-                                });
-                        });
-                };
-
-                userSchema.statics.register = function(userObj, cb) {
-                    User.findOne({
-                        username: userObj.username
-                    }, (err, dbUser) => {
-                        if (err || dbUser) return cb(err || {
-                            error: 'Username not available.'
-                        })
-
-
-                        bcrypt.hash(userObj.password, 12, (err, hash) => {
-                            if (err) return cb(err);
-
-                            var user = new User({
-                                username: userObj.username,
-                                password: hash
+                User
+                    .findById(payload._id)
+                    .select({
+                        password: false
+                    })
+                    .exec((err, user) => {
+                        if (err || !user) {
+                            return res.clearCookie('accessToken').status(400).send(err || { error: 'User not found.'});
+                                }
+                                req.user = user; next();
                             });
-
-                            user.save(cb);
-                        });
                     });
-                };
+            };
 
-                userSchema.statics.authenticate = function(userObj, cb) {
-                    // find the user by the username
-                    // confirm the password
+userSchema.statics.register = function(userObj, cb) {
+    User.findOne({
+        username: userObj.username
+    }, (err, dbUser) => {
+        if (err || dbUser) return cb(err || {
+            error: 'Username not available.'
+        })
 
-                    // if user is found, and password is good, create a token
-                    this.findOne({
-                        username: userObj.username
-                    }, (err, dbUser) => {
-                        if (err || !dbUser) return cb(err || {
-                            error: 'Login failed. Username or password incorrect.'
-                        });
 
-                        bcrypt.compare(userObj.password, dbUser.password, (err, isGood) => {
-                            if (err || !isGood) return cb(err || {
-                                error: 'Login failed. Username or password incorrect.'
-                            });
+        bcrypt.hash(userObj.password, 12, (err, hash) => {
+            if (err) return cb(err);
 
-                            var token = dbUser.makeToken();
+            var user = new User({
+                username: userObj.username,
+                password: hash
+            });
 
-                            cb(null, token);
-                        });
-                    });
-                };
+            user.save(cb);
+        });
+    });
+};
 
-                userSchema.methods.makeToken = function() {
-                    var token = jwt.sign({
-                        _id: this._id,
-                        exp: moment().add(1, 'day').unix() // in seconds
-                    }, JWT_SECRET);
-                    return token;
-                };
+userSchema.statics.authenticate = function(userObj, cb) {
+    // find the user by the username
+    // confirm the password
 
-                var User = mongoose.model('User', userSchema);
+    // if user is found, and password is good, create a token
+    this.findOne({
+        username: userObj.username
+    }, (err, dbUser) => {
+        if (err || !dbUser) return cb(err || {
+            error: 'Login failed. Username or password incorrect.'
+        });
 
-                module.exports = User;
+        bcrypt.compare(userObj.password, dbUser.password, (err, isGood) => {
+            if (err || !isGood) return cb(err || {
+                error: 'Login failed. Username or password incorrect.'
+            });
+
+            var token = dbUser.makeToken();
+
+            cb(null, token);
+        });
+    });
+};
+
+userSchema.methods.makeToken = function() {
+    var token = jwt.sign({
+        _id: this._id,
+        exp: moment().add(1, 'day').unix() // in seconds
+    }, JWT_SECRET);
+    return token;
+};
+
+var User = mongoose.model('User', userSchema);
+
+module.exports = User;
